@@ -1,0 +1,427 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!50!black,
+    urlcolor=blue!50!black,
+    citecolor=blue!50!black,
+    pdftitle={Theoretical Math Syllabus},
+    pdfauthor={Arshad}
+}
+
+\titleformat{\section}{\Large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.6em}{}
+
+\newlist{tasklist}{itemize}{1}
+\setlist[tasklist]{label=$\square$, leftmargin=1.6em, itemsep=2pt, topsep=4pt}
+
+\newcommand{\review}{\textit{(review — already covered in comps notes)}}
+\newcommand{\note}[1]{\textcolor{gray!70!black}{\small #1}}
+
+\title{\textbf{Theoretical Foundations Syllabus} \\[4pt]
+\large Math \& Theory Track for ML Research }
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\vspace{-2em}
+
+\paragraph{Scope.} This is the theoretical-math companion to the main internship prep syllabus. It covers the derivation-level math underlying both the research track (compression, information theory, optimization) and the quant track (probability, statistics, stochastic processes), plus the adjacent theoretical CS material (algorithms, complexity) that both tracks assume. Where a topic is already built out in your comps notes at full derivation depth, it is marked as review rather than repeated in detail — this document instead points to what depth to maintain, and where to go beyond comps scope.
+
+\tableofcontents
+\vspace{1em}
+
+% ======================================================
+\section{Linear Algebra (Proof-Based)}
+% ======================================================
+
+\subsection{Vector spaces and subspaces \review}
+\begin{tasklist}
+    \item Fields, vector space axioms, subspaces
+    \item Span, linear independence, basis, dimension
+    \item Change of basis, coordinate representation
+\end{tasklist}
+
+\subsection{Linear maps and matrices \review}
+\begin{tasklist}
+    \item Linear transformations as maps, matrix representation
+    \item Rank, nullity, rank--nullity theorem
+    \item Invertibility, determinant, and their relationship to rank
+\end{tasklist}
+
+\subsection{Inner product spaces}
+\begin{tasklist}
+    \item Inner products, norms induced by inner products, Cauchy--Schwarz
+    \item Orthogonality, orthogonal complements
+    \item Gram--Schmidt orthogonalization (derive, don't just state)
+    \item Orthogonal projections onto subspaces \note{ties to your least-squares/PCA comps note}
+\end{tasklist}
+
+\subsection{Eigenvalues, eigenvectors, and spectral theory \review}
+\begin{tasklist}
+    \item Characteristic polynomial, algebraic vs.\ geometric multiplicity
+    \item Diagonalizability conditions
+    \item Spectral theorem for symmetric/Hermitian matrices (know the proof sketch)
+\end{tasklist}
+
+\subsection{Singular Value Decomposition — full theory}
+\note{Deepen beyond the comps note: this underlies your low-rank compression experiments.}
+\begin{tasklist}
+    \item SVD existence proof (via eigendecomposition of $A^\top A$)
+    \item Relationship between SVD and eigendecomposition of symmetric matrices
+    \item \textbf{Eckart--Young theorem}: proof that truncated SVD is the optimal low-rank approximation in Frobenius and spectral norm
+    \item Pseudo-inverse (Moore--Penrose) via SVD
+\end{tasklist}
+
+\subsection{Matrix norms, conditioning, and stability}
+\begin{tasklist}
+    \item Operator norms (spectral norm), Frobenius norm, their relationship to singular values
+    \item Condition number of a matrix: $\kappa(A) = \sigma_{\max}/\sigma_{\min}$
+    \item Why ill-conditioning matters for numerical stability (connects to Section 7)
+\end{tasklist}
+
+\subsection{Matrix calculus}
+\note{Needed for backprop in matrix/tensor form, not just the scalar case in your comps notes.}
+\begin{tasklist}
+    \item Gradients of scalar functions w.r.t.\ vectors and matrices
+    \item Jacobians of vector-valued functions
+    \item Chain rule in matrix form (used implicitly every time you backprop through a linear layer)
+    \item Common identities: $\nabla_x (x^\top A x)$, $\nabla_A \,\text{tr}(AB)$, $\nabla_A \log\det A$
+\end{tasklist}
+
+\subsection{Positive semi-definite matrices}
+\begin{tasklist}
+    \item Definitions and equivalent characterizations of PSD
+    \item Cholesky decomposition
+    \item Why covariance matrices, Gram matrices, and Hessians of convex functions are PSD
+\end{tasklist}
+
+% ======================================================
+\section{Real Analysis \& Multivariable Calculus}
+% ======================================================
+
+\subsection{Single-variable foundations}
+\begin{tasklist}
+    \item Limits, continuity, differentiability — rigorous $\epsilon$-$\delta$ definitions
+    \item Mean value theorem
+    \item Sequences and series, convergence tests (ratio, root, comparison)
+\end{tasklist}
+
+\subsection{Multivariable calculus}
+\begin{tasklist}
+    \item Partial derivatives, gradients, directional derivatives
+    \item Hessian matrix, second-order conditions
+    \item Taylor's theorem — single-variable and multivariable (with remainder term)
+    \item Chain rule for multivariable functions
+\end{tasklist}
+
+\subsection{Convexity}
+\note{This is the theoretical backbone of Section 5 (optimization) — spend real time here.}
+\begin{tasklist}
+    \item Convex sets: definition, examples, operations that preserve convexity
+    \item Convex functions: definition via Jensen's inequality
+    \item First-order condition for convexity ($f(y) \ge f(x) + \nabla f(x)^\top (y-x)$)
+    \item Second-order condition (Hessian $\succeq 0$)
+    \item Strict convexity vs.\ strong convexity, and why strong convexity gives faster optimization rates
+\end{tasklist}
+
+\subsection{Implicit function theorem (light touch)}
+\begin{tasklist}
+    \item Statement and intuition
+    \item Why it matters for constrained optimization (connects to Lagrange multipliers)
+\end{tasklist}
+
+% ======================================================
+\section{Probability Theory}
+% ======================================================
+
+\subsection{Foundations \review (partially)}
+\begin{tasklist}
+    \item Probability axioms, sample spaces, events
+    \item Conditional probability, Bayes' theorem — full fluency, not just the formula
+    \item Independence vs.\ conditional independence
+\end{tasklist}
+
+\subsection{Random variables and distributions}
+\begin{tasklist}
+    \item Discrete vs.\ continuous random variables, PMF/PDF/CDF
+    \item Common discrete distributions: Bernoulli, Binomial, Poisson, Geometric — derive mean/variance for each
+    \item Common continuous distributions: Uniform, Normal, Exponential, Gamma — derive mean/variance for each
+    \item Transformations of random variables (change of variables formula)
+\end{tasklist}
+
+\subsection{Expectation and moments}
+\begin{tasklist}
+    \item Expectation, variance, linearity of expectation
+    \item Moment generating functions and characteristic functions
+    \item Using MGFs to derive moments and prove distributional results (e.g.\ sums of independent normals)
+\end{tasklist}
+
+\subsection{Joint distributions}
+\begin{tasklist}
+    \item Joint, marginal, and conditional distributions
+    \item Covariance and correlation, covariance matrices
+    \item Independence in terms of joint density factorization
+\end{tasklist}
+
+\subsection{Limit theorems}
+\begin{tasklist}
+    \item Law of Large Numbers (weak and strong — know the distinction)
+    \item Central Limit Theorem — statement, intuition, and where it breaks down
+\end{tasklist}
+
+\subsection{Concentration inequalities}
+\note{High-value for both ML theory (generalization bounds) and quant interviews.}
+\begin{tasklist}
+    \item Markov's inequality
+    \item Chebyshev's inequality (derive from Markov)
+    \item Hoeffding's inequality
+    \item Chernoff bounds — derivation via MGF and optimization over a free parameter
+\end{tasklist}
+
+% ======================================================
+\section{Mathematical Statistics}
+% ======================================================
+
+\subsection{Point estimation}
+\begin{tasklist}
+    \item Maximum likelihood estimation \review \note{extend beyond the logistic-regression case in comps to the general framework}
+    \item Method of moents
+    \item Sufficiency and the factorization theorem
+\end{tasklist}
+
+\subsection{Estimator quality}
+\begin{tasklist}
+    \item Bias, variance, mean squared error decomposition \review
+    \item Consistency and asymptotic efficiency
+    \item Cramér--Rao lower bound (Fisher information)
+\end{tasklist}
+
+\subsection{Hypothesis testing theory}
+\begin{tasklist}
+    \item Null/alternative hypotheses, Type I/II errors, power \review
+    \item Neyman--Pearson lemma (most powerful tests)
+    \item Likelihood ratio tests
+    \item $p$-values — correct interpretation (and common misinterpretations to avoid in interviews)
+\end{tasklist}
+
+\subsection{Interval estimation}
+\begin{tasklist}
+    \item Confidence intervals — construction and interpretation
+    \item Relationship between confidence intervals and hypothesis tests
+\end{tasklist}
+
+\subsection{Bayesian statistics}
+\begin{tasklist}
+    \item Prior, likelihood, posterior — Bayes' rule for parameters
+    \item Conjugate priors (Beta--Binomial, Normal--Normal)
+    \item MAP estimation vs.\ MLE — when they coincide
+\end{tasklist}
+
+% ======================================================
+\section{Optimization Theory}
+% ======================================================
+
+\subsection{Unconstrained optimization}
+\begin{tasklist}
+    \item First-order and second-order optimality conditions
+    \item Gradient descent: convergence rate for convex and strongly convex functions (derive the rates, don't just cite them)
+    \item Effect of the Lipschitz constant and step size choice on convergence
+\end{tasklist}
+
+\subsection{Constrained optimization}
+\begin{tasklist}
+    \item Lagrange multipliers for equality constraints
+    \item Karush--Kuhn--Tucker (KKT) conditions for inequality constraints — derive, don't memorize
+    \item Complementary slackness
+\end{tasklist}
+
+\subsection{Duality}
+\begin{tasklist}
+    \item Lagrangian dual function and dual problem
+    \item Weak duality (always holds) vs.\ strong duality (needs conditions)
+    \item Slater's condition
+    \item Revisit SVM duality (from comps) as a worked example of all of the above
+\end{tasklist}
+
+\subsection{Convergence theory for iterative methods}
+\begin{tasklist}
+    \item Convergence rate of momentum methods
+    \item Nesterov acceleration — what changes vs.\ vanilla momentum
+    \item SGD convergence under noisy gradients — bias/variance of the stochastic gradient estimator
+\end{tasklist}
+
+\subsection{Second-order methods (conceptual)}
+\begin{tasklist}
+    \item Newton's method — quadratic convergence, cost of the Hessian
+    \item Quasi-Newton methods (BFGS) — how they approximate the Hessian cheaply
+\end{tasklist}
+
+% ======================================================
+\section{Information Theory}
+% ======================================================
+\note{This is the theoretical backbone of \emph{why} compression works at all — directly relevant to your research project.}
+
+\subsection{Entropy}
+\begin{tasklist}
+    \item Shannon entropy — definition and interpretation as expected information content
+    \item Joint entropy, conditional entropy, chain rule for entropy
+\end{tasklist}
+
+\subsection{Divergence and cross-entropy}
+\begin{tasklist}
+    \item Cross-entropy — relationship to entropy and KL divergence
+    \item KL divergence — definition, non-negativity (Gibbs' inequality), and why it's asymmetric
+    \item Why KL divergence is the natural loss for distillation (connects to Track C/D in the main syllabus)
+\end{tasklist}
+
+\subsection{Mutual information}
+\begin{tasklist}
+    \item Definition in terms of KL divergence between joint and product-of-marginals
+    \item Relationship to entropy: $I(X;Y) = H(X) - H(X|Y)$
+\end{tasklist}
+
+\subsection{Rate--distortion theory (conceptual)}
+\begin{tasklist}
+    \item The rate--distortion tradeoff — formal statement of the accuracy/compression tradeoff you're studying empirically
+    \item Why this gives a theoretical lower bound to compare your empirical Pareto frontier against
+\end{tasklist}
+
+% ======================================================
+\section{Numerical Methods \& Numerical Linear Algebra}
+% ======================================================
+
+\subsection{Floating point and numerical error}
+\begin{tasklist}
+    \item Floating point representation (FP32/FP16/BF16) — mantissa/exponent tradeoffs
+    \item Rounding error, catastrophic cancellation
+    \item Why BF16 preserves training stability better than FP16 (exponent range vs.\ mantissa precision)
+\end{tasklist}
+
+\subsection{Conditioning and stability}
+\begin{tasklist}
+    \item Condition number and error amplification
+    \item Numerically stable vs.\ unstable algorithms for the same problem (e.g.\ computing variance)
+\end{tasklist}
+
+\subsection{Iterative numerical linear algebra}
+\begin{tasklist}
+    \item Power iteration for dominant eigenvector/eigenvalue
+    \item Conceptual overview of Lanczos / randomized SVD for large-scale low-rank approximation
+\end{tasklist}
+
+\subsection{Quantization as numerical approximation}
+\begin{tasklist}
+    \item Uniform vs.\ non-uniform quantization — formalize as a rounding operator
+    \item Quantization error as additive noise — bias and variance of the quantization error model
+    \item Effect of quantization noise on gradient flow (why QAT needs a straight-through estimator)
+\end{tasklist}
+
+% ======================================================
+\section{Stochastic Processes (Quant Track)}
+% ======================================================
+
+\subsection{Markov chains}
+\begin{tasklist}
+    \item Transition matrices, Chapman--Kolmogorov equations
+    \item Stationary distributions, existence and uniqueness conditions
+    \item Ergodicity, mixing
+\end{tasklist}
+
+\subsection{Random walks}
+\begin{tasklist}
+    \item Simple random walk — expected position, variance growth
+    \item Gambler's ruin as a worked example (classic quant interview problem)
+\end{tasklist}
+
+\subsection{Martingales (conceptual)}
+\begin{tasklist}
+    \item Definition and intuition (fair-game property)
+    \item Stopping times, optional stopping theorem — statement and intuition
+\end{tasklist}
+
+\subsection{Brownian motion and Itô calculus (conceptual)}
+\begin{tasklist}
+    \item Brownian motion — defining properties (independent increments, continuity)
+    \item Itô's lemma — statement and why it differs from the ordinary chain rule
+    \item Enough intuition to reason about it in an interview, not full stochastic calculus fluency
+\end{tasklist}
+
+% ======================================================
+\section{Discrete Math \& Combinatorics}
+% ======================================================
+
+\subsection{Counting}
+\begin{tasklist}
+    \item Permutations, combinations, binomial coefficients
+    \item Inclusion--exclusion principle
+    \item Pigeonhole principle
+\end{tasklist}
+
+\subsection{Recurrences and generating functions (light)}
+\begin{tasklist}
+    \item Solving linear recurrences
+    \item Generating functions as a counting tool (conceptual)
+\end{tasklist}
+
+\subsection{Graph theory (theoretical)}
+\begin{tasklist}
+    \item Trees, connectivity, cycles
+    \item Graph coloring — basic bounds
+\end{tasklist}
+
+% ======================================================
+\section{Theory of Algorithms \& Complexity}
+% ======================================================
+
+\subsection{Asymptotic analysis}
+\begin{tasklist}
+    \item Big-O, $\Omega$, $\Theta$ — formal definitions, not just intuition
+    \item Amortized analysis (e.g.\ dynamic array resizing)
+\end{tasklist}
+
+\subsection{Complexity classes (conceptual)}
+\begin{tasklist}
+    \item P vs.\ NP — definitions and why the distinction matters practically
+    \item NP-completeness — what a reduction proof looks like, at a high level
+\end{tasklist}
+
+\subsection{Algorithmic paradigms with correctness proofs}
+\begin{tasklist}
+    \item Divide and conquer — recurrence-based analysis (Master theorem)
+    \item Dynamic programming — optimal substructure and overlapping subproblems, formal justification
+    \item Greedy algorithms — exchange argument proofs of optimality
+\end{tasklist}
+
+\subsection{Graph algorithms theory}
+\begin{tasklist}
+    \item Shortest path algorithms — correctness proof sketch for Dijkstra
+    \item Minimum spanning tree — correctness of Kruskal's/Prim's (cut property)
+\end{tasklist}
+
+% ======================================================
+\section*{Suggested Sequencing}
+\addcontentsline{toc}{section}{Suggested Sequencing}
+% ======================================================
+
+Work top-to-bottom roughly in this order, since later sections lean on earlier ones:
+
+\begin{enumerate}[leftmargin=1.6em]
+    \item Linear Algebra (Section 1) $\to$ Real Analysis \& Convexity (Section 2) $\to$ Optimization Theory (Section 5) — these three form one continuous arc.
+    \item Probability (Section 3) $\to$ Mathematical Statistics (Section 4) — same arc, run in parallel with the above.
+    \item Information Theory (Section 6) once Sections 1 and 3 are solid — it draws on both.
+    \item Numerical Methods (Section 7) alongside your compression experiments, as topics become practically relevant.
+    \item Stochastic Processes (Section 8), Discrete Math (Section 9), and Algorithms/Complexity (Section 10) run as the dedicated quant-interview-prep block, in parallel with everything above rather than after it.
+\end{enumerate}
+
+\end{document}
